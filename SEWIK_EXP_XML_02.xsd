@@ -1,0 +1,1016 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- edited with XMLSpy v2011 sp1 (x64) (http://www.altova.com) by Michał Pilch (Komenda Glówna Policji) -->
+<!-- 17.06.2013 - MP - Usuniecie w typach zlozonych atrybutu mixed -->
+<!-- 19.06.2013 - MP - Dodanie atrybutu data utworzenia i data modyfikacji -->
+<!-- 21.06.2013 - MP - Zamiana słowników domen SUSW i SUSB w informacjach dodatkowych uczestników -->
+<!-- 26.06.2013 - MP - Dodanie atrybutu SzkicZdarzenia w typie Zdarzenie. Wypełnienie wartością T bedzie oznaczało że w dodatkowej paczce ze szkicami znajduje się wygenerowany szkic w postaci jpg.-->
+<!-- 16.05.2016 - MP - Modyfikacja zrzutu o pola z nowej wersji karty -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sewik="http://www.policja.gov.pl/sewik" targetNamespace="http://www.policja.gov.pl/sewik" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="2.4">
+	<!-- Definicja schematu zrzutu SEWIK dla podmiotów zewnętrznych
+    -->
+	<!--++++++++++++ Typy proste ++++++++++++++-->
+	<xsd:simpleType name="ZSZD_ID">
+		<xsd:annotation>
+			<xsd:documentation>Identyfikator zdarzenia drogowego</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:integer">
+			<xsd:totalDigits value="38"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ZSUC_ID">
+		<xsd:annotation>
+			<xsd:documentation>Identyfikator uczestnika zdarzenia</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:integer">
+			<xsd:totalDigits value="38"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ZSPO_ID">
+		<xsd:annotation>
+			<xsd:documentation>Identyfikator pojazdu uczestniczącego w zdarzeniu</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:integer">
+			<xsd:totalDigits value="38"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DICT_KOD">
+		<xsd:annotation>
+			<xsd:documentation>Typ wartości kodu słownika</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DICT_TYPE">
+		<xsd:annotation>
+			<xsd:documentation>Typ wartości domeny słownika</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SKAR_KOD">
+		<xsd:annotation>
+			<xsd:documentation>Rodzaj pojazdu ze słownika </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Text1">
+		<xsd:annotation>
+			<xsd:documentation>Typ String 1 znak</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Text255">
+		<xsd:annotation>
+			<xsd:documentation>Typ String 255 znaków</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="255"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="KodGUS">
+		<xsd:annotation>
+			<xsd:documentation>Typ String 30 znaków kodu GUS</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="30"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="GPSType">
+		<xsd:annotation>
+			<xsd:documentation>Typ danych GPS</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="GPSType2">
+		<xsd:annotation>
+			<xsd:documentation>Typ danych GPS wg KOD GUS wzorzec 99,9999999999999</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="17"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Text2000">
+		<xsd:annotation>
+			<xsd:documentation>Typ String 2000 znaków</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="2000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--+++++++++++Typy złozone +++++++++++++++-->
+	<xsd:complexType name="SPSP_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSPO_ID" type="sewik:ZSPO_ID"/>
+			<xsd:element name="SPSP_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SPSP_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SPSP"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SPIC_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSPO_ID" type="sewik:ZSPO_ID"/>
+			<xsd:element name="SPIC_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SPIC_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SPIC"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="NADR_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="NADR_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="NADR_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="NADR"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="STNA_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="STNA_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="STNA_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="STNA"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RODR_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="RODR_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="RODR_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="RODR"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SYSW_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="SYSW_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SYSW_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SYSW"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OZPO_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="OZPO_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="OZPO_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="OZPO"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ZABU_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="ZABU_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="ZABU_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="ZABU"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CHMZ_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="CHMZ_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="CHMZ_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE"/>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GEOD_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="GEOD_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="GEOD_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="GEOD"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SKRZ_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="SKRZ_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SKRZ_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SKRZ"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SSWA_KODType">
+		<xsd:sequence minOccurs="1" maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="SSWA_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SSWA_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SSWA"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SSUP_KODType">
+		<xsd:sequence minOccurs="1" maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="SSUP_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SSUP_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SSUP"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SPIP_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID"/>
+			<xsd:element name="SPIP_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SPIP_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SPIP"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SUSB_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSUC_ID" type="sewik:ZSUC_ID"/>
+			<xsd:element name="SUSB_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SUSB_TABK_TYPE" type="sewik:DICT_TYPE"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SUSW_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSUC_ID" type="sewik:ZSUC_ID"/>
+			<xsd:element name="SUSW_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SUSW_TABK_TYPE" type="sewik:DICT_TYPE"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SPSZ_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSUC_ID" type="sewik:ZSUC_ID"/>
+			<xsd:element name="SPSZ_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SPSZ_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SPSZ"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SPPI_KODType">
+		<xsd:sequence maxOccurs="1">
+			<xsd:element name="ZSUC_ID" type="sewik:ZSUC_ID"/>
+			<xsd:element name="SPPI_KOD" type="sewik:DICT_KOD"/>
+			<xsd:element name="SPPI_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SPPI"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--++++++++++++++++++++++++++-->
+	<xsd:complexType name="UCZESTNICY">
+		<xsd:sequence>
+			<xsd:element name="OSOBA" type="sewik:OSOBAType" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OSOBAType">
+		<xsd:annotation>
+			<xsd:documentation>Typ zawierający dane o uczestnikach</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ID" type="sewik:ZSUC_ID">
+				<xsd:annotation>
+					<xsd:documentation>Identyfikator uczestnka zdarzenia</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID">
+				<xsd:annotation>
+					<xsd:documentation>Identyfikator Zdarzenia drogowego</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ZSPO_ID" type="sewik:ZSPO_ID" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identyfiaktor pojazdu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SSRU_KOD" type="sewik:DICT_KOD">
+				<xsd:annotation>
+					<xsd:documentation>Rodzaj uczestnika: Słownik SSRU</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SSRU_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SSRU"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="DATA_UR" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Data urodzenia uczestnika</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SOBY_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Obywatelstwo uczestnika: Słownik SOBY</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SOBY_TABK_TYPE" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SOBY"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="PLEC" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Płeć uczestnika: </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MIEJSCE_W_POJ" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Miejsce w pojeżdzie</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SRUZ_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Rozstrzygnięcie: Słownik SRUZ</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SRUZ_TABK_TYPE" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SRUZ"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="INWALIDA" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Czy uczestnik jest inwalidą ?</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="1"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="SUSU_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Czy posiada uprawnienia do kierowania? Słownik SUSU</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SUSU_TABK_TYPE" type="sewik:DICT_TYPE" minOccurs="0"/>
+			<xsd:element name="LICZBA_LAT_KIEROWANIA" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Liczba Lat kierowania pojazdem</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:integer">
+						<xsd:totalDigits value="10"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="OBCOKRAJOWIEC" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Czy uczestnik jest obcokrajowcem ?</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="STUC_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Odnesione obrażenia: Słownik STUC</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="STUC_TABK_TYPE" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="STUC"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="INFO_DODATKOWE" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="POD_WPLYWEM" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+									<xsd:element name="SUSW_KOD" type="sewik:SUSW_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="JAZDA_BEZ" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+									<xsd:element name="SUSB_KOD" type="sewik:SUSB_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SUZZ_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Miejsce zamieszkania uczestnika: Słownik SUZZ</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SUZZ_TABK_TYPE" type="sewik:DICT_TYPE" minOccurs="0"/>
+			<xsd:element name="ZBIEGL_Z_MIEJSCA" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Czy uczestnik zbiegł z miesca zdarzenia ?</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="POZIOM_ALKOHOLU" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Poziom alkoholu </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SPAK_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Jednostka miary poziomu alkoholu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SPAK_TABK_TYPE" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SPAK"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="ODBLASKI" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 11.2015 Czy uczestnik maił odblaski?</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PRZYCZYNY_KIEROWCY" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+						<xsd:element name="SPSZ_KOD" type="sewik:SPSZ_KODType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PRZYCZYNY_PIESZY" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+						<xsd:element name="SPPI_KOD" type="sewik:SPPI_KODType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="DataUtworzenia" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Data utworzenia rekordu</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="DataMod" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Data ostatniej modyfikacji rekordu</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="POJAZDY">
+		<xsd:sequence>
+			<xsd:element name="POJAZD" type="sewik:POJAZDType" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="POJAZDType">
+		<xsd:annotation>
+			<xsd:documentation>Typ zawierający dane o pojeździe</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ID" type="sewik:ZSPO_ID">
+				<xsd:annotation>
+					<xsd:documentation>Identyfiaktor pojazdu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ZSZD_ID" type="sewik:ZSZD_ID">
+				<xsd:annotation>
+					<xsd:documentation>Identyfikator zdarzenia drogoweg</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NR_POJAZDU">
+				<xsd:annotation>
+					<xsd:documentation>Numer pojazdu w zdarzeniu drogowym</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:integer">
+						<xsd:totalDigits value="10"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="RODZAJ_POJAZDU" type="sewik:SKAR_KOD">
+				<xsd:annotation>
+					<xsd:documentation>Rodzaj pojazdu: kod słownika domeny SKAR_KOD</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MARKA" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Martka pojazdu: wartość opisowa</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:maxLength value="255"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="SPSU_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Ubezpieczeciel: Słownik SPSU</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SPSU_TABK_TYPE" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SPSU"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="FIRMA_UBZ" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Firma ubezpieczeniowa: Wpisana bez słownika</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="KRAJ_REJ" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa opisowa Kraju rejestracji pojazdu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="KRAJ_UBZ" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa opisaowa kraju ubezpieczenia pojazdu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ROK_PRODUKCJI" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Rok produkcji pojazdu</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:integer">
+						<xsd:totalDigits value="4"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="DATA_OST_BAD_TECH" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Data ostatniego badania technicznego</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WYPOSAZENIE_DOD" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Czy pojazd posiada wyposażenie dodatkowe: T/N</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="STAN_POJAZDU" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="SPSP_KOD" type="sewik:SPSP_KODType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="INNE_CECHY_POJAZU" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="SPIC_KOD" type="sewik:SPIC_KODType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="DataUtworzenia" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Data utworzenia rekordu</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="DataMod" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Data ostatniej modyfikacji rekordu</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<!--++++++++++++++++++++++++++++++++++++++++++-->
+	<xsd:complexType name="ZDARZENIA">
+		<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+			<xsd:element name="ZDARZENIE" type="sewik:ZDARZENIEType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ZDARZENIEType">
+		<xsd:annotation>
+			<xsd:documentation>Typ zawierający dane o zdarzeniu</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ID" type="sewik:ZSZD_ID">
+				<xsd:annotation>
+					<xsd:documentation>Identyfiakor zdarzenia drogowego</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JEDNOSTKA_MIEJSCA" type="sewik:Text2000">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa jednostki policji</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JEDNOSTKA_LIKWIDUJACA" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa jednostki llikwidującej zdarzenie</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JEDNOSTKA_OPERATORA" type="sewik:Text2000">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa jednostki przyjmującej zgłoszenie o zdarzeniu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NR_KW" type="sewik:Text255">
+				<xsd:annotation>
+					<xsd:documentation>Numer spraw</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="KOD_GUS" type="sewik:KodGUS" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Kod GUS</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GPS_X_GUS" type="sewik:GPSType2" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Współżędne GPS X wg kodu GUS</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GPS_Y_GUS" type="sewik:GPSType2" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Współżędne GPS Y wg kodu GUS</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WOJ" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa opisowa województwa</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GMINA" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa opisowa gminy</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="POWIAT" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa opisowa powiatu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DZIELNICA" type="sewik:Text2000" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa opisowa dzielnicy</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MIEJSCOWOSC" type="sewik:Text255" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa opisowa miejscowości</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ULICA_ADRES" type="sewik:Text255" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nazwa ulicy</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NUMER_DOMU" type="sewik:Text255" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Numer domu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ZSSD_KOD" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Kod słownika dróg: Słownik ZSSD</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="KM_HM" type="xsd:double" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Pikietarz</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ULICA_SKRZYZ" type="sewik:Text255" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Ulica skrzyżowanie</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ODLEGLOSC_SKRZYZ" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Odegłość od skryzżowania</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:integer">
+						<xsd:totalDigits value="10"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="KIERUNEK" type="sewik:Text255" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Kierunek od skrzyżowania</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RONDO_WEZEL" type="sewik:Text255" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 11.2015 Miejsce zdarzenia rondo/węzeł</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATA_ZDARZENIA" type="xsd:dateTime">
+				<xsd:annotation>
+					<xsd:documentation>Data zdarzenia pełna</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATA_ZDARZ" type="xsd:date">
+				<xsd:annotation>
+					<xsd:documentation>Data zdarzenia </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GODZINA_ZDARZ" type="xsd:time">
+				<xsd:annotation>
+					<xsd:documentation>Godzina zdarzenia</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WSP_GPS_X" type="sewik:GPSType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Współżedne GPS X</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WSP_GPS_Y" type="sewik:GPSType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Współżędneg GPS Y</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ZSSD_KOD2" type="sewik:DICT_KOD" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Kod słownika dróg 2: Słownik ZSSD</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PREDKOSC_DOPUSZCZALNA" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Prędkość dopuszczalna w miejscu zdarzenia</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:integer">
+						<xsd:totalDigits value="10"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="SZOS_KOD" type="sewik:DICT_KOD">
+				<xsd:annotation>
+					<xsd:documentation>Oświetlenie</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SZOS_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SZOS"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="SZRD_KOD" type="sewik:DICT_KOD">
+				<xsd:annotation>
+					<xsd:documentation>Rodzaj zdarzenia</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SZRD_TABK_TYPE">
+				<xsd:simpleType>
+					<xsd:restriction base="sewik:DICT_TYPE">
+						<xsd:enumeration value="SZRD"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="DROGA_PUBLICZNA" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Czy droga w miejscu zdarzenia jest publiczna ?</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="STREFA_ZAMIESZKALA" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Czy miesce zdarzenie jest strefą zamieszkałą?</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NADZOR" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Czy droga jest pod nadzorem Policji ?</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="STREFA_RUCHU" type="sewik:Text1" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Czy miejsce zdarzenia jest  strefą ruchu ?</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATA_ZGLOSZENIA" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Data i godzina przyjęcia zgłoszenia.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DATA_PRZYJAZDU" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Data i godzina przyjazdu na meijsce zdarzenia </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LICZBA_PASOW" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Od 29.05.2013: Liczba pasów w miejscu zdarzenia</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:integer">
+						<xsd:totalDigits value="4"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="INFO_O_DRODZE">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="NAWIERZCHNIA">
+							<xsd:complexType>
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:element name="NADR_KOD" type="sewik:NADR_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="STAN_NAWIERZCHNI">
+							<xsd:complexType>
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:element name="STNA_KOD" type="sewik:STNA_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="RODZAJ_DROGI">
+							<xsd:complexType>
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:element name="RODR_KOD" type="sewik:RODR_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="SYGNALIZACJA_SWIETLNA">
+							<xsd:complexType>
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:element name="SYSW_KOD" type="sewik:SYSW_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="OZNAKOWANIE_POZIOME" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:element name="OZPO_KOD" type="sewik:OZPO_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="MIEJSCE">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="GEOMETRIA_DROGI" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+									<xsd:element name="GEOD_KOD" type="sewik:GEOD_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="SKRZYZOWANIE" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+									<xsd:element name="SKRZ_KOD" type="sewik:SKRZ_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="OBSZAR_ZABUDOWANY">
+							<xsd:complexType>
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:element name="ZABU_KOD" type="sewik:ZABU_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="CHARAKT_MIEJSCA">
+							<xsd:complexType>
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:element name="CHMZ_KOD" type="sewik:CHMZ_KODType"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="WARUNKI_ATMOSFERYCZNE">
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="unbounded">
+						<xsd:element name="SSWA_KOD" type="sewik:SSWA_KODType" minOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="USZKODZENIA_POZA_POJAZDAMI" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="unbounded">
+						<xsd:element name="SSUP_KOD" type="sewik:SSUP_KODType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="INNE_PRZYCZYNY" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="unbounded">
+						<xsd:element name="SPIP_KOD" type="sewik:SPIP_KODType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="POJAZDY" type="sewik:POJAZDY"/>
+			<xsd:element name="UCZESTNICY" type="sewik:UCZESTNICY"/>
+		</xsd:sequence>
+		<xsd:attribute name="DataUtworzenia" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Data utworzenia rekordu</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="DataMod" type="xsd:date" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Data ostatniej modyfikacji rekordu</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="SzkicZdarzenia" type="sewik:Text1">
+			<xsd:annotation>
+				<xsd:documentation>Czy zdarzenie posiada szkic w postaci binarnej ? T/N</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:element name="SEWIK_EXP_XML_02">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ZDARZENIA" type="sewik:ZDARZENIA"/>
+			</xsd:sequence>
+			<xsd:attribute name="DataZrzutu" type="xsd:dateTime" use="required">
+				<xsd:annotation>
+					<xsd:documentation>Data generacji zrzutu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="DataOd" type="xsd:date">
+				<xsd:annotation>
+					<xsd:documentation>Zakres dat generowania zrzutu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="DataDo" type="xsd:date">
+				<xsd:annotation>
+					<xsd:documentation>Zakres dat generowania zrzutu</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="LiczbaZdarzen" type="xsd:integer">
+				<xsd:annotation>
+					<xsd:documentation>Liczba Zdarzeń w zrzucie</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
